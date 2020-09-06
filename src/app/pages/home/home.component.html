@@ -1,0 +1,88 @@
+<div>
+  <nav class="navbar navbar-light bg-light nav-fill justify-content-center">
+    <a class="navbar-brand" href="#">DHIS TODO APPLICATION</a>
+  </nav>
+  <div class="container">
+    <div class="row">
+      <div class="col-10 mt-4 offset-1 card p-3">
+        <div class="d-flex">
+          <mat-form-field class="w-100">
+            <mat-label>Enter New Todo</mat-label>
+            <input type="text" matInput [(ngModel)]="newTodo" />
+          </mat-form-field>
+          <button
+            class="ml-2"
+            style="height: 40px"
+            color="primary"
+            (click)="onCreateTodo(newTodo)"
+            mat-flat-button
+          >
+            Add Todo
+          </button>
+        </div>
+
+        <div class="row">
+          <div class="col-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="mb-4 text-muted">Todo List</h5>
+                <div class="card">
+                  <div class="card-body">
+                    <div
+                      class="d-flex justify-content-between"
+                      *ngIf="!showTodoList()"
+                    >
+                      <div>Ooops! No Tasks ToDos</div>
+                    </div>
+                    <div *ngIf="showTodoList()">
+                      <div
+                        class="d-flex justify-content-between"
+                        *ngFor="let todo of todoList; index as i"
+                      >
+                        <div>
+                          {{ todo }}
+                        </div>
+                        <mat-checkbox
+                          color="primary"
+                          (click)="onCompleteTodo(i)"
+                        ></mat-checkbox>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="mb-4 text-muted">Completed List</h5>
+                <div class="card">
+                  <div class="card-body">
+                    <div
+                      class="d-flex justify-content-between"
+                      *ngIf="!showCompletedList()"
+                    >
+                      <div>Ooops! No Completed ToDos</div>
+                    </div>
+                    <div *ngIf="showCompletedList()">
+                      <div
+                        class="d-flex justify-content-between"
+                        *ngFor="let todo of completedList"
+                      >
+                        <div>
+                          {{ todo }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
