@@ -42,10 +42,22 @@
                         <div>
                           {{ todo }}
                         </div>
-                        <mat-checkbox
-                          color="primary"
-                          (click)="onCompleteTodo(i)"
-                        ></mat-checkbox>
+                        <div>
+                          <button mat-button [matMenuTriggerFor]="menu">
+                            <i class="fa fa-bars"></i>
+                          </button>
+                          <mat-menu #menu="matMenu">
+                            <button (click)="onCompleteTodo(i)" mat-menu-item>
+                              <i class="fa fa-check"></i> Complete
+                            </button>
+                            <button (click)="onEditTodo()" mat-menu-item>
+                              <i class="fa fa-edit"></i> Edit
+                            </button>
+                            <button (click)="onDeleteTodo(i)" mat-menu-item>
+                              <i class="fa fa-trash"></i> Delete
+                            </button>
+                          </mat-menu>
+                        </div>
                       </div>
                     </div>
                   </div>
