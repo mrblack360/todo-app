@@ -1,8 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { TodoService } from './services/todo.service';
 import { Todo } from './models/todo.model';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
+import { EditDialogComponent } from '../edit-dialog/edit-dialog.component';
+import { isUndefined } from 'util';
 
 @Component({
   selector: 'app-home',
@@ -13,9 +20,12 @@ export class HomeComponent implements OnInit {
   todoList: Todo[] = [];
   completedList: Todo[] = [];
   newTodo = '';
+  currentTodo: string;
+  editedTodo: string;
   constructor(
     private todoService: TodoService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -51,16 +61,32 @@ export class HomeComponent implements OnInit {
   }
 
   // implement support to edit todo item and update into the list and save data to server
-  onEditTodo(todoItem: Todo) {
+  onEditTodo(todoItemIndex: number) {
     // 1. update edited todo into the list
-    // 2. save the updated list to server
-    this._snackBar.open(
-      'Can not edit a moment, try deleting and add another correct task',
-      'OK',
-      {
-        duration: 2000,
-      }
-    );
+    this.editedTodo = this.todoList[todoItemIndex] + '';
+    this.currentTodo = this.todoList[todoItemIndex] + '';
+
+    // Opening Dialog
+    const dialogRef = this.dialog.open(EditDialogComponent, {
+      width: '250px',
+      data: { editedTodo: this.editedTodo },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      result === undefined
+        ? (this.editedTodo = this.currentTodo)
+        : (this.editedTodo = result);
+      this._snackBar.open(
+        'Successful Edited ' + this.currentTodo + '=>' + this.editedTodo,
+        'OK',
+        {
+          duration: 2000,
+        }
+      );
+      // 2. save the updated list to server
+      this.todoList[todoItemIndex] = this.editedTodo;
+      this.todoService.saveTodos(this.todoList);
+    });
   }
 
   // implement support to mark todo item as complete and update into the list and save data to server
