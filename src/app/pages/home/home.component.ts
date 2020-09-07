@@ -28,9 +28,15 @@ export class HomeComponent implements OnInit {
   }
 
   // implement support to remove todo item from the list and save data to server
-  onDeleteTodo(todoItem: Todo) {
+  onDeleteTodo(todoItemIndex: number) {
+    // Display to the user
+    this._snackBar.open(this.todoList[todoItemIndex] + ' Deleted', 'OK', {
+      duration: 2000,
+    });
     // 1. remove todo from the list
+    this.todoList.splice(todoItemIndex, 1);
     // 2. save the updated list to server
+    this.todoService.saveTodos(this.todoList);
   }
 
   // implement support to add todo item into the list and save data to server
@@ -48,6 +54,13 @@ export class HomeComponent implements OnInit {
   onEditTodo(todoItem: Todo) {
     // 1. update edited todo into the list
     // 2. save the updated list to server
+    this._snackBar.open(
+      'Can not edit a moment, try deleting and add another correct task',
+      'OK',
+      {
+        duration: 2000,
+      }
+    );
   }
 
   // implement support to mark todo item as complete and update into the list and save data to server

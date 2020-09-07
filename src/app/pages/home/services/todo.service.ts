@@ -30,9 +30,22 @@ export class TodoService {
   saveTodos(todoList: Todo[]) {
     return this.httpClient
       .put(`${this.dataStoreUrl}/todo_list_mrblack360/todo_list`, todoList)
-      .subscribe((res) => {
-        console.log(res);
-      });
+      .subscribe(
+        (res) => {
+          // if()
+          console.log('Aborting Update... Creating');
+        },
+        (err) => {
+          return this.httpClient
+            .post(
+              `${this.dataStoreUrl}/todo_list_mrblack360/todo_list`,
+              todoList
+            )
+            .subscribe((res) => {
+              console.log(res);
+            });
+        }
+      );
   }
   saveCompletedTodos(completedTodoList: Todo[]) {
     return this.httpClient
@@ -40,8 +53,20 @@ export class TodoService {
         `${this.dataStoreUrl}/todo_list_mrblack360/completed_list`,
         completedTodoList
       )
-      .subscribe((res) => {
-        console.log(res);
-      });
+      .subscribe(
+        (res) => {
+          console.log('Aborting edition... Creating key');
+        },
+        (err) => {
+          return this.httpClient
+            .post(
+              `${this.dataStoreUrl}/todo_list_mrblack360/completed_list`,
+              completedTodoList
+            )
+            .subscribe((res) => {
+              console.log(res);
+            });
+        }
+      );
   }
 }
